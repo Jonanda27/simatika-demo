@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifikasi Data - SIMATIKA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background-color: #f8fafc; 
+      display: flex;
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+    
+    .content-area {
+      padding: 1.5rem;
+      max-width: 72rem;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); border-radius: 0; overflow: hidden;
+    }
+    .card-header {
+      background: rgba(248, 250, 252, 0.5); border-bottom: 1px solid #f1f5f9; padding: 1.25rem 1.5rem 0 1.5rem;
+    }
+
+    .tabs {
+      display: flex; gap: 1.5rem;
+    }
+    .tab-btn {
+      padding-bottom: 1rem; margin-bottom: -1px; border-bottom: 2px solid transparent; 
+      font-size: 0.875rem; font-weight: 700; color: #64748b; background: transparent; 
+      border-top: none; border-left: none; border-right: none; cursor: pointer; transition: all 0.2s;
+    }
+    .tab-btn:hover { color: #334155; }
+    .tab-btn.active { border-bottom-color: var(--brown-600); color: var(--brown-600); }
+    .tab-btn.active-emerald { border-bottom-color: #059669; color: #059669; }
+
+    .list-item {
+      padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 1px solid #f1f5f9; transition: background 0.2s;
+    }
+    .list-item:hover { background: rgba(253, 248, 246, 0.5); /* brown-50/50 */ }
+    .list-item:last-child { border-bottom: none; }
+
+    .btn-review {
+      background: white; border: 1px solid #e2e8f0; color: var(--brown-700); font-weight: 700; font-size: 0.875rem; 
+      padding: 0.5rem 1.25rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.2s;
+      border-radius: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); height: 2.5rem;
+    }
+    .btn-review:hover { background: var(--brown-50); border-color: var(--brown-200); }
+
+    .tag-info {
+      display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; 
+      font-size: 0.75rem; font-weight: 700; border-radius: 0; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b;
+    }
+    .tag-brown { background: var(--brown-50); border-color: var(--brown-100); color: var(--brown-700); }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="appSidebar">
+    <div class="sidebar-header">
+      <img src="images/logo.png" alt="Logo" class="sidebar-logo-img" onerror="this.src='https://via.placeholder.com/40';">
+      <div class="sidebar-brand-text">
+        <span style="font-weight: 700; font-size: 1.125rem; color: white; line-height: 1.1;">SIMATIKA</span>
+        <span style="font-size: 0.6875rem; color: #94a3b8;">Keuskupan Timika</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <p class="nav-label">MENU STASI</p>
+      
+      <a href="stasi_dashboard.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Dashboard Stasi</span>
+        </div>
+      </a>
+      
+      <div class="nav-item" onclick="toggleSubmenu('induk')">
+        <div class="nav-item-icon">
+          <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Database Induk</span>
+        </div>
+        <i data-lucide="chevron-right" class="submenu-chevron" style="width: 1rem; height: 1rem;"></i>
+      </div>
+      <div class="submenu" id="submenu-induk" style="display: none;">
+        <a href="stasi_dataumat.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Umat</span>
+        </a>
+        <a href="stasi_datakeluarga.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Keluarga</span>
+        </a>
+        <a href="stasi_pengurus.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Pengurus Aktif</span>
+        </a>
+        <a href="stasi_sakramen.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Sakramen</span>
+        </a>
+        <a href="stasi_mutasi.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Mutasi Umat</span>
+        </a>
+        <a href="stasi_aktivitas.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Aktivitas Pastoral</span>
+        </a>
+      </div>
+      
+      <a href="stasi_peta.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Peta Stasi</span>
+        </div>
+      </a>
+      
+      <a href="stasi_verifikasi.html" class="nav-item active">
+        <div class="nav-item-icon">
+          <i data-lucide="shield-check" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Verifikasi Data</span>
+        </div>
+      </a>
+      
+      <div class="nav-item" onclick="toggleSubmenu('laporan')">
+        <div class="nav-item-icon">
+          <i data-lucide="folder-open" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Laporan & Arsip</span>
+        </div>
+        <i data-lucide="chevron-right" class="submenu-chevron" style="width: 1rem; height: 1rem;"></i>
+      </div>
+      <div class="submenu" id="submenu-laporan" style="display: none;">
+        <a href="stasi_laporan.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Laporan & Statistik</span>
+        </a>
+        <a href="stasi_dokumen.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Dokumen & Arsip</span>
+        </a>
+      </div>
+
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button class="btn-hamburger" onclick="toggleSidebarLayout()">
+          <i data-lucide="menu" style="width: 1.5rem; height: 1.5rem; color: #475569;"></i>
+        </button>
+        <h1 class="topbar-title">Verifikasi Data</h1>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding-left: 1.25rem; border-left: 1px solid #e2e8f0;">
+          <div style="text-align: right;">
+            <p style="font-weight: 700; font-size: 0.875rem; margin: 0; color: #1e293b;">stasi_paulus</p>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0;">Admin Stasi</p>
+          </div>
+          <div style="width: 2.5rem; height: 2.5rem; background-color: #6d4b40; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            SP
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+
+      <!-- HEADER -->
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+        <div style="display: flex; gap: 0.75rem;">
+          <div style="width: 2.5rem; height: 2.5rem; background-color: var(--brown-50); border: 1px solid var(--brown-100); display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="check-circle" style="width: 1.25rem; height: 1.25rem; color: var(--brown-600);"></i>
+          </div>
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.025em;">Antrean Verifikasi Stasi</h2>
+            <p style="font-size: 0.875rem; color: #64748b; margin: 0.25rem 0 0 0; font-weight: 500;">
+              Review data pendataan keluarga dari lapangan (KBG) sebelum dinaikkan ke Paroki.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CARD -->
+      <div class="card">
+        
+        <!-- TABS -->
+        <div class="card-header">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('pending', this)">Menunggu Stasi (2)</button>
+            <button class="tab-btn" onclick="switchTab('approved', this)">Riwayat Disetujui Paroki</button>
+          </div>
+        </div>
+
+        <!-- LIST CONTENT: PENDING -->
+        <div id="tab-pending" style="display: block;">
+          <div style="display: flex; flex-direction: column;">
+            
+            <!-- Item 1 -->
+            <div class="list-item">
+              <div style="display: flex; gap: 1.25rem; align-items: flex-start;">
+                <div style="width: 3.5rem; height: 3.5rem; background: var(--brown-50); border: 1px solid var(--brown-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="home" style="width: 1.5rem; height: 1.5rem; color: var(--brown-600);"></i>
+                </div>
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem 0;">Keluarga Bapak Yohanes Baptista</h4>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="tag-info tag-brown">
+                      <i data-lucide="user" style="width: 0.875rem; height: 0.875rem;"></i> Penginput: kbg_paulus
+                    </span>
+                    <span class="tag-info">
+                      <i data-lucide="users" style="width: 0.875rem; height: 0.875rem;"></i> 5 Anggota
+                    </span>
+                    <span class="tag-info">
+                      <i data-lucide="clock" style="width: 0.875rem; height: 0.875rem;"></i> Dikirim: 25 Jun 2026 09:30
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-review" onclick="openModal()">
+                <i data-lucide="eye" style="width: 1rem; height: 1rem;"></i> Review Data
+              </button>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="list-item">
+              <div style="display: flex; gap: 1.25rem; align-items: flex-start;">
+                <div style="width: 3.5rem; height: 3.5rem; background: var(--brown-50); border: 1px solid var(--brown-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="home" style="width: 1.5rem; height: 1.5rem; color: var(--brown-600);"></i>
+                </div>
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem 0;">Keluarga Ibu Katarina S.</h4>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="tag-info tag-brown">
+                      <i data-lucide="user" style="width: 0.875rem; height: 0.875rem;"></i> Penginput: kbg_paulus
+                    </span>
+                    <span class="tag-info">
+                      <i data-lucide="users" style="width: 0.875rem; height: 0.875rem;"></i> 3 Anggota
+                    </span>
+                    <span class="tag-info">
+                      <i data-lucide="clock" style="width: 0.875rem; height: 0.875rem;"></i> Dikirim: 24 Jun 2026 15:45
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-review" onclick="openModal()">
+                <i data-lucide="eye" style="width: 1rem; height: 1rem;"></i> Review Data
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- LIST CONTENT: APPROVED (Hidden by default) -->
+        <div id="tab-approved" style="display: none;">
+          <div style="padding: 5rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 4rem; height: 4rem; background: #f8fafc; border: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+              <i data-lucide="check-circle" style="width: 2rem; height: 2rem; color: #94a3b8;"></i>
+            </div>
+            <h3 style="font-size: 1.125rem; font-weight: 700; color: #334155; margin: 0;">Tidak ada riwayat baru</h3>
+            <p style="font-size: 0.875rem; color: #64748b; margin: 0.25rem 0 0 0; font-weight: 500;">Riwayat data yang disetujui Paroki akan muncul di sini.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DETAIL VERIFIKASI -->
+  <div id="verifikasiModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; box-sizing: border-box;">
+    <div style="background: white; width: 100%; max-width: 72rem; height: 90vh; display: flex; flex-direction: row; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden;">
+      
+      <!-- Modal Left Sidebar -->
+      <div style="width: 18rem; background: #f8fafc; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0;">
+        <div style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0;">
+          <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.6875rem; font-weight: 700; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; margin-bottom: 0.75rem;">Verifikasi Stasi</span>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0; line-height: 1.2;">Kel. Bapak Yohanes Baptista</h2>
+          <p style="font-size: 0.875rem; color: #64748b; margin: 0.25rem 0 0 0;">Terkoneksi KBG</p>
+        </div>
+        
+        <div style="flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 0.25rem; overflow-y: auto;">
+          <button class="modal-tab-btn active" onclick="switchModalTab('ringkasan', this)" style="width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; font-weight: 500; border: none; background: var(--brown-600); color: white; cursor: pointer; text-align: left; transition: all 0.2s;">
+            <i data-lucide="alert-circle" style="width: 1rem; height: 1rem;"></i> Ringkasan
+          </button>
+          <button class="modal-tab-btn" onclick="switchModalTab('rumah', this)" style="width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; font-weight: 500; border: none; background: transparent; color: #475569; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="if(!this.classList.contains('active')) this.style.background='#e2e8f0'" onmouseout="if(!this.classList.contains('active')) this.style.background='transparent'">
+            <i data-lucide="home" style="width: 1rem; height: 1rem;"></i> Ekonomi & Rumah
+          </button>
+          <button class="modal-tab-btn" onclick="switchModalTab('lokasi', this)" style="width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; font-weight: 500; border: none; background: transparent; color: #475569; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="if(!this.classList.contains('active')) this.style.background='#e2e8f0'" onmouseout="if(!this.classList.contains('active')) this.style.background='transparent'">
+            <i data-lucide="map-pin" style="width: 1rem; height: 1rem;"></i> Lokasi & Foto
+          </button>
+          <button class="modal-tab-btn" onclick="switchModalTab('anggota', this)" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; font-size: 0.875rem; font-weight: 500; border: none; background: transparent; color: #475569; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="if(!this.classList.contains('active')) this.style.background='#e2e8f0'" onmouseout="if(!this.classList.contains('active')) this.style.background='transparent'">
+            <div style="display: flex; align-items: center; gap: 0.75rem;"><i data-lucide="users" style="width: 1rem; height: 1rem;"></i> Anggota</div>
+            <span style="background: #e2e8f0; padding: 0.125rem 0.375rem; border-radius: 0; font-size: 0.75rem; font-weight: 700; color: #334155;">5</span>
+          </button>
+        </div>
+
+        <div style="padding: 1rem; border-top: 1px solid #e2e8f0; background: #f1f5f9;">
+          <div style="font-size: 0.6875rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 0.5rem;">Info Penginput</div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="width: 2rem; height: 2rem; background: var(--brown-200); color: var(--brown-700); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">KB</div>
+            <div>
+              <div style="font-size: 0.875rem; font-weight: 700; color: #1e293b;">kbg_paulus</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Pengurus KBG</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Right Content -->
+      <div style="flex: 1; display: flex; flex-direction: column; position: relative;">
+        <div style="flex: 1; overflow-y: auto; padding: 2rem 2.5rem; background: white;">
+          
+          <!-- Tab Content: Ringkasan -->
+          <div id="m-ringkasan" style="display: block;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem 0;">Ringkasan Data</h3>
+            <p style="font-size: 0.875rem; color: #64748b; margin: 0 0 1.5rem 0;">Tinjauan cepat informasi keluarga.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+              <div style="padding: 1.25rem; border: 1px solid #e2e8f0; background: #f8fafc;">
+                <i data-lucide="users" style="width: 2rem; height: 2rem; color: var(--brown-500); margin-bottom: 0.75rem;"></i>
+                <div style="font-size: 1.875rem; font-weight: 900; color: #1e293b;">5</div>
+                <div style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Total Anggota Keluarga</div>
+              </div>
+              <div style="padding: 1.25rem; border: 1px solid #e2e8f0; background: #f8fafc;">
+                <i data-lucide="home" style="width: 2rem; height: 2rem; color: #10b981; margin-bottom: 0.75rem;"></i>
+                <div style="font-size: 1.875rem; font-weight: 900; color: #1e293b;">Milik Sendiri</div>
+                <div style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Status Kepemilikan Rumah</div>
+              </div>
+            </div>
+
+            <div style="padding: 1.25rem; border: 1px solid var(--brown-200); background: var(--brown-50); color: var(--brown-900); font-size: 0.875rem; line-height: 1.5;">
+              <strong>Tugas Anda:</strong> Mohon periksa keabsahan foto rumah, kelengkapan surat sakramen pada setiap anggota keluarga, dan validitas domisili sebelum melakukan persetujuan.
+            </div>
+          </div>
+
+          <!-- Tab Content: Rumah -->
+          <div id="m-rumah" style="display: none;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem 0;">Ekonomi & Rumah</h3>
+            <p style="font-size: 0.875rem; color: #64748b; margin: 0 0 1.5rem 0;">Informasi Nomor KK, status hunian, dan pendapatan.</p>
+            
+            <table style="width: 100%; border-collapse: collapse; text-align: left; border: 1px solid #e2e8f0;">
+              <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <th style="padding: 1rem 1.5rem; background: #f8fafc; width: 35%; font-size: 0.875rem; color: #475569;">Nomor KK Paroki</th>
+                  <td style="padding: 1rem 1.5rem; font-size: 0.875rem; color: #1e293b; font-weight: 500;">-</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <th style="padding: 1rem 1.5rem; background: #f8fafc; font-size: 0.875rem; color: #475569;">Pendapatan Per Bulan</th>
+                  <td style="padding: 1rem 1.5rem; font-size: 0.875rem; color: #047857; font-weight: 700;">Rp 3.500.000</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <th style="padding: 1rem 1.5rem; background: #f8fafc; font-size: 0.875rem; color: #475569;">Asuransi Kesehatan</th>
+                  <td style="padding: 1rem 1.5rem; font-size: 0.875rem; color: #1e293b; font-weight: 500;">BPJS Kesehatan</td>
+                </tr>
+                <tr>
+                  <th style="padding: 1rem 1.5rem; background: #f8fafc; font-size: 0.875rem; color: #475569;">Fasilitas MCK</th>
+                  <td style="padding: 1rem 1.5rem; font-size: 0.875rem; color: #1e293b; font-weight: 500;">Kamar Mandi, WC / Toilet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tab Content: Lokasi -->
+          <div id="m-lokasi" style="display: none;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem 0;">Lokasi & Foto Bukti</h3>
+            <p style="font-size: 0.875rem; color: #64748b; margin: 0 0 1.5rem 0;">Koordinat domisili, foto fisik rumah, dan dokumen KK.</p>
+            
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; height: 300px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-weight: 500; margin-bottom: 1.5rem;">
+              [ Map Placeholder ]
+            </div>
+            
+            <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem 0;">Foto Fisik Rumah</h4>
+            <div style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 3rem; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; margin-bottom: 1.5rem;">
+              <i data-lucide="image" style="width: 3rem; height: 3rem; margin-bottom: 1rem;"></i>
+              <span style="font-weight: 500;">Tidak ada foto dilampirkan</span>
+            </div>
+          </div>
+
+          <!-- Tab Content: Anggota -->
+          <div id="m-anggota" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+              <div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0 0 0.25rem 0;">Daftar Anggota Keluarga</h3>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0;">Detail individu dan status sakramen.</p>
+              </div>
+            </div>
+            
+            <div style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+              <div style="height: 0.5rem; background: var(--brown-500); width: 100%;"></div>
+              <div style="padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
+                      <h4 style="font-size: 1.125rem; font-weight: 700; color: #0f172a; margin: 0;">Bapak Yohanes Baptista</h4>
+                      <span style="background: var(--brown-100); color: var(--brown-800); border: 1px solid var(--brown-200); padding: 0.125rem 0.5rem; font-size: 0.6875rem; font-weight: 700;">Kepala Keluarga</span>
+                    </div>
+                    <div style="font-size: 0.875rem; color: #64748b;">Laki-laki • Lahir: Timika, 15 Jun 1980 • Petani</div>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <span style="background: var(--brown-100); color: var(--brown-800); padding: 0.25rem 0.5rem; font-size: 0.6875rem; font-weight: 700;">Baptis</span>
+                    <span style="background: #e0e7ff; color: #3730a3; padding: 0.25rem 0.5rem; font-size: 0.6875rem; font-weight: 700;">Komuni</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- Sticky Footer -->
+        <div style="border-top: 1px solid #e2e8f0; background: white; padding: 1.5rem 2.5rem;">
+          
+          <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 1rem; margin-bottom: 1.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 700; color: #7f1d1d; margin-bottom: 0.5rem;">
+              <i data-lucide="x-circle" style="width: 1rem; height: 1rem; color: #dc2626;"></i> Alasan Penolakan <span style="font-weight: 400; color: #ef4444;">(Opsional)</span>
+            </label>
+            <input type="text" placeholder="Ketik alasan penolakan jika ditolak..." style="width: 100%; padding: 0.625rem 1rem; border: 1px solid #fecaca; font-family: var(--font-sans); outline: none; box-sizing: border-box;" onfocus="this.style.borderColor='#ef4444'" onblur="this.style.borderColor='#fecaca'">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button style="display: flex; align-items: center; gap: 0.5rem; background: white; border: 1px solid #fecaca; color: #dc2626; font-weight: 700; font-size: 0.875rem; padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+              <i data-lucide="x-circle" style="width: 1.25rem; height: 1.25rem;"></i> Tolak Data
+            </button>
+            <div style="display: flex; gap: 0.75rem;">
+              <button onclick="closeModal()" style="background: transparent; border: none; color: #64748b; font-weight: 600; font-size: 0.875rem; padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='#1e293b'" onmouseout="this.style.color='#64748b'">Batalkan</button>
+              <button style="display: flex; align-items: center; gap: 0.5rem; background: #059669; border: 1px solid #047857; color: white; font-weight: 700; font-size: 0.875rem; padding: 0.75rem 2rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(5,150,105,0.3);" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
+                <i data-lucide="check-circle" style="width: 1.25rem; height: 1.25rem;"></i> Setujui & Verifikasi
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function toggleSidebarLayout() {
+      const sidebar = document.getElementById('appSidebar');
+      const main = document.querySelector('.main-content');
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('expanded');
+    }
+
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById('submenu-' + id);
+      const chevron = submenu.previousElementSibling.querySelector('.submenu-chevron');
+      if (submenu.style.display === 'none' || submenu.style.display === '') {
+        submenu.style.display = 'flex';
+        chevron.style.transform = 'rotate(90deg)';
+      } else {
+        submenu.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function switchTab(tabId, el) {
+      // Reset active tabs
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      // Add active to clicked
+      el.classList.add('active');
+
+      // Hide all contents
+      document.getElementById('tab-pending').style.display = 'none';
+      document.getElementById('tab-approved').style.display = 'none';
+
+      // Show target content
+      document.getElementById('tab-' + tabId).style.display = 'block';
+    }
+
+    function openModal() {
+      document.getElementById('verifikasiModal').style.display = 'flex';
+      // Re-initialize icons just in case
+      setTimeout(() => lucide.createIcons(), 50);
+    }
+
+    function closeModal() {
+      document.getElementById('verifikasiModal').style.display = 'none';
+    }
+
+    function switchModalTab(tabId, el) {
+      // Reset active styles on modal tabs
+      document.querySelectorAll('.modal-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'transparent';
+        btn.style.color = '#475569';
+      });
+      
+      // Add active to clicked
+      el.classList.add('active');
+      el.style.background = 'var(--brown-600)';
+      el.style.color = 'white';
+
+      // Hide all contents
+      document.getElementById('m-ringkasan').style.display = 'none';
+      document.getElementById('m-rumah').style.display = 'none';
+      document.getElementById('m-lokasi').style.display = 'none';
+      document.getElementById('m-anggota').style.display = 'none';
+
+      // Show target content
+      document.getElementById('m-' + tabId).style.display = 'block';
+    }
+  </script>
+</body>
+</html>

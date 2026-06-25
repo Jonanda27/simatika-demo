@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "no_kk_paroki": "2304010001",
+    "kode_unik_keluarga": "K-2304010001",
+    "status_numpang": "Keluarga Utama",
+    "status_rumah": "Milik Sendiri",
+    "Umats": [
+      {
+        "nama_lengkap": "Budi Santoso",
+        "nomor_induk_umat": "U-12345678",
+        "jenis_kelamin": "L",
+        "status_dalam_keluarga": "Kepala Keluarga"
+      },
+      {
+        "nama_lengkap": "Siti Aminah",
+        "nomor_induk_umat": "U-12345679",
+        "jenis_kelamin": "P",
+        "status_dalam_keluarga": "Istri"
+      },
+      {
+        "nama_lengkap": "Andi Santoso",
+        "nomor_induk_umat": "U-12345680",
+        "jenis_kelamin": "L",
+        "status_dalam_keluarga": "Anak"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "no_kk_paroki": "2304010002",
+    "kode_unik_keluarga": "K-2304010002",
+    "status_numpang": "Keluarga Utama",
+    "status_rumah": "Milik Sendiri",
+    "Umats": [
+      {
+        "nama_lengkap": "Agus Yulianto",
+        "nomor_induk_umat": "U-87654321",
+        "jenis_kelamin": "L",
+        "status_dalam_keluarga": "Kepala Keluarga"
+      }
+    ]
+  }
+]

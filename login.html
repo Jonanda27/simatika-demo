@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SIMATIKA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+    }
+    
+    .split-layout {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Kiri: Gambar Background */
+    .login-image-side {
+      display: none; /* Sembunyi di mobile */
+      width: 50%;
+      background-image: url('images/hero_church.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .login-image-side {
+        display: block;
+      }
+    }
+
+    /* Overlay gradien halus agar teks/logo di gambar terbaca (opsional) */
+    .login-image-side::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(101, 67, 33, 0.4));
+    }
+
+    .image-overlay-content {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      z-index: 10;
+      color: white;
+      max-width: 80%;
+    }
+
+    .image-overlay-content h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.025em;
+    }
+
+    .image-overlay-content p {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+    }
+
+    /* Kanan: Form Login */
+    .login-form-side {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-color: white;
+    }
+
+    @media (min-width: 1024px) {
+      .login-form-side {
+        width: 50%;
+      }
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .role-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: var(--text-slate-800);
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.3s;
+      background: white;
+    }
+
+    .role-btn:hover {
+      border-color: var(--brown-400);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+      transform: translateY(-2px);
+    }
+
+    .icon-wrapper {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="split-layout">
+    <!-- LAYER KIRI: GAMBAR GENERATE -->
+    <div class="login-image-side">
+      <div class="image-overlay-content">
+        <h2>Melayani Umat<br>dengan Sepenuh Hati</h2>
+        <p>Sistem Informasi Manajemen Tata Laksana & Pastoral Keuskupan Timika.</p>
+      </div>
+    </div>
+
+    <!-- LAYER KANAN: PILIHAN LOGIN -->
+    <div class="login-form-side">
+      <div class="login-container">
+        
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+          <a href="index.html" style="display:inline-block; margin-bottom:1rem;">
+            <img src="images/logo.png" alt="Logo" style="width: 4.5rem; height: 4.5rem; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150';">
+          </a>
+          <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--text-slate-900);">Masuk ke SIMATIKA</h2>
+          <p style="color: var(--text-slate-500); font-size: 1rem; margin-top: 0.5rem;">Pilih peran Anda untuk masuk ke sistem.</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <!-- Login KBG -->
+          <a href="dashboard.html" class="role-btn">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div class="icon-wrapper" style="background-color: #eff6ff; color: #2563eb;">
+                <i data-lucide="users" style="width: 1.5rem; height: 1.5rem;"></i>
+              </div>
+              <span>Login KBG</span>
+            </div>
+            <i data-lucide="arrow-right" style="width: 1.25rem; height: 1.25rem; color: var(--text-slate-400);"></i>
+          </a>
+
+          <!-- Login Stasi -->
+          <a href="stasi_dashboard.html" class="role-btn">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div class="icon-wrapper" style="background-color: #f0fdf4; color: #16a34a;">
+                <i data-lucide="shield-check" style="width: 1.5rem; height: 1.5rem;"></i>
+              </div>
+              <span>Login Stasi</span>
+            </div>
+            <i data-lucide="arrow-right" style="width: 1.25rem; height: 1.25rem; color: var(--text-slate-400);"></i>
+          </a>
+
+          <!-- Login Paroki -->
+          <a href="paroki_dashboard.html" class="role-btn">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div class="icon-wrapper" style="background-color: var(--brown-50); color: var(--brown-600);">
+                <i data-lucide="church" style="width: 1.5rem; height: 1.5rem;"></i>
+              </div>
+              <span>Login Paroki</span>
+            </div>
+            <i data-lucide="arrow-right" style="width: 1.25rem; height: 1.25rem; color: var(--text-slate-400);"></i>
+          </a>
+
+        </div>
+        
+        <div style="text-align:center; margin-top: 3rem;">
+          <a href="index.html" style="color:var(--text-slate-500); text-decoration:none; font-size:0.875rem; font-weight:600; display:inline-flex; align-items:center; gap:0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--brown-600)'" onmouseout="this.style.color='var(--text-slate-500)'">
+            <i data-lucide="arrow-left" style="width:1rem; height:1rem;"></i> Kembali ke Beranda
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

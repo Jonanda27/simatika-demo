@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Keluarga Stasi - SIMATIKA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background-color: #f8fafc; 
+      display: flex;
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+    
+    .content-area {
+      padding: 2rem;
+      max-width: 80rem; /* max-w-7xl */
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Table specifics */
+    .btn-action {
+      height: 2rem; width: 2rem; 
+      display: inline-flex; align-items: center; justify-content: center; 
+      color: #64748b; background: transparent; border: 1px solid #e2e8f0; 
+      border-radius: 0.25rem; transition: all 0.2s; cursor: pointer;
+    }
+    .btn-action:hover.btn-eye { color: #059669; border-color: #a7f3d0; background: #ecfdf5; }
+    .btn-action:hover.btn-trash { color: #be123c; border-color: #fecdd3; background: #fff1f2; }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    
+    .modal-content {
+      background: white; width: 90vw; max-width: 800px; height: 85vh; max-height: 750px;
+      display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      transform: scale(0.95); transition: transform 0.3s;
+    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+
+    @media (min-width: 640px) {
+      .modal-content { flex-direction: row; }
+    }
+
+    .modal-sidebar { width: 100%; border-bottom: 1px solid #e2e8f0; background: #f8fafc; display: flex; flex-direction: column; }
+    @media (min-width: 640px) {
+      .modal-sidebar { width: 260px; border-bottom: none; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    }
+
+    .modal-body { flex: 1; overflow-y: auto; padding: 2rem; background: white; }
+
+    .modal-nav-btn {
+      width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem;
+      font-size: 0.875rem; font-weight: 700; color: #475569; background: transparent; border: none;
+      cursor: pointer; transition: all 0.2s; text-align: left;
+    }
+    .modal-nav-btn:hover { background: #e2e8f0; }
+    .modal-nav-btn.active { background: var(--brown-600); color: white; }
+
+    .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+    .tab-pane.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .detail-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; border: 1px solid #e2e8f0; }
+    .detail-table th { width: 40%; background: #f8fafc; color: #64748b; font-weight: 700; padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; text-transform: uppercase; font-size: 0.75rem; }
+    .detail-table td { width: 60%; color: #0f172a; font-weight: 700; padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; }
+
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="appSidebar">
+    <div class="sidebar-header">
+      <img src="images/logo.png" alt="Logo" class="sidebar-logo-img" onerror="this.src='https://via.placeholder.com/40';">
+      <div class="sidebar-brand-text">
+        <span style="font-weight: 700; font-size: 1.125rem; color: white; line-height: 1.1;">SIMATIKA</span>
+        <span style="font-size: 0.6875rem; color: #94a3b8;">Keuskupan Timika</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <p class="nav-label">MENU STASI</p>
+      
+      <a href="stasi_dashboard.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Dashboard Stasi</span>
+        </div>
+      </a>
+      
+      <!-- Database Induk Dropdown (ACTIVE) -->
+      <div class="nav-item" onclick="toggleSubmenu('induk')">
+        <div class="nav-item-icon">
+          <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Database Induk</span>
+        </div>
+        <i data-lucide="chevron-right" class="submenu-chevron" style="width: 1rem; height: 1rem; transform: rotate(90deg);"></i>
+      </div>
+      <div class="submenu" id="submenu-induk" style="display: flex;">
+        <a href="stasi_dataumat.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Umat</span>
+        </a>
+        <a href="stasi_datakeluarga.html" class="submenu-item active">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: white;" class="sub-dot"></div>
+          <span class="nav-text">Data Keluarga</span>
+        </a>
+        <a href="stasi_pengurus.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Pengurus Aktif</span>
+        </a>
+        <a href="stasi_sakramen.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Sakramen</span>
+        </a>
+        <a href="stasi_mutasi.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Mutasi Umat</span>
+        </a>
+        <a href="stasi_aktivitas.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Aktivitas Pastoral</span>
+        </a>
+      </div>
+      
+      <a href="stasi_peta.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Peta Stasi</span>
+        </div>
+      </a>
+      
+      <a href="stasi_verifikasi.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="shield-check" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Verifikasi Data</span>
+        </div>
+      </a>
+      
+      <!-- Laporan & Arsip Dropdown -->
+      <div class="nav-item" onclick="toggleSubmenu('laporan')">
+        <div class="nav-item-icon">
+          <i data-lucide="folder-open" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Laporan & Arsip</span>
+        </div>
+        <i data-lucide="chevron-right" class="submenu-chevron" style="width: 1rem; height: 1rem;"></i>
+      </div>
+      <div class="submenu" id="submenu-laporan" style="display: none;">
+        <a href="stasi_laporan.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Laporan & Statistik</span>
+        </a>
+        <a href="stasi_dokumen.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Dokumen & Arsip</span>
+        </a>
+      </div>
+
+    </nav>
+    <div class="sidebar-footer">
+      <div class="circle-badge">N</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button class="btn-hamburger" onclick="toggleSidebarLayout()">
+          <i data-lucide="menu" style="width: 1.5rem; height: 1.5rem; color: #475569;"></i>
+        </button>
+        <h1 class="topbar-title">Data Keluarga</h1>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        
+        <div class="notification-wrapper">
+          <i data-lucide="bell" style="width: 1.25rem; height: 1.25rem; color: #475569;"></i>
+          <span class="notification-badge">2</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding-left: 1.25rem; border-left: 1px solid #e2e8f0;">
+          <div style="text-align: right;">
+            <p style="font-weight: 700; font-size: 0.875rem; margin: 0; color: #1e293b;">stasi_paulus</p>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0;">Admin Stasi</p>
+          </div>
+          <div style="width: 2.5rem; height: 2.5rem; background-color: #6d4b40; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            SP
+          </div>
+        </div>
+        
+        <a href="index.html" class="btn-logout" title="Keluar">
+          <i data-lucide="log-out" style="width: 1.25rem; height: 1.25rem; color: #334155;"></i>
+        </a>
+      </div>
+    </header>
+
+    <div class="content-area">
+
+      <!-- PAGE HEADER -->
+      <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
+            <div style="width: 2.5rem; height: 2.5rem; border-radius: 0; background-color: #ecfdf5; border: 1px solid #a7f3d0; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="home" style="width: 1.25rem; height: 1.25rem; color: #059669;"></i>
+            </div>
+            Data Keluarga
+          </h2>
+          <p style="font-size: 0.875rem; color: #64748b; margin: 0.5rem 0 0 3.25rem; font-weight: 500;">
+            Total <span style="font-weight: 700; color: #1e293b;">312</span> keluarga Katolik terdaftar.
+          </p>
+        </div>
+        <div style="flex-shrink: 0;">
+          <button style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 700; color: #047857; border: 1px solid #a7f3d0; background: transparent; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#ecfdf5'" onmouseout="this.style.backgroundColor='transparent'">
+            <i data-lucide="download" style="width: 1rem; height: 1rem;"></i>
+            Export Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN CARD -->
+      <div style="background: white; border: 1px solid #e2e8f0; border-radius: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); overflow: hidden;">
+        
+        <!-- FILTER BAR -->
+        <div style="padding: 1.25rem; border-bottom: 1px solid #f1f5f9; background: #f8fafc; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+          <!-- Search -->
+          <div style="flex: 1; min-width: 200px; max-width: 384px; position: relative;">
+            <i data-lucide="search" style="position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); width: 1.125rem; height: 1.125rem; color: #94a3b8;"></i>
+            <input type="text" placeholder="Cari No. KK Paroki..." style="width: 100%; box-sizing: border-box; height: 2.75rem; padding-left: 2.5rem; padding-right: 1rem; font-size: 0.875rem; border: 1px solid #e2e8f0; font-weight: 500; outline: none;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#e2e8f0'">
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="background-color: rgba(248, 250, 252, 0.8); border-bottom: 1px solid #e2e8f0;">
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 50px;">No</th>
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">No. KK & Kode Unik</th>
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Kepala Keluarga</th>
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;">Anggota</th>
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status Rumah</th>
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Pendapatan</th>
+                <th style="padding: 1rem; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; padding-right: 1.25rem;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding: 1rem; font-size: 0.875rem; color: #64748b;">1</td>
+                <td style="padding: 1rem;">
+                  <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <span style="font-family: monospace; font-size: 0.75rem; font-weight: 700; color: #334155; background: #f1f5f9; padding: 0.25rem 0.5rem; border: 1px solid #e2e8f0; width: fit-content;">KK-PRK-8812</span>
+                    <span style="font-family: monospace; font-size: 0.625rem; font-weight: 700; color: #047857; background: #ecfdf5; padding: 0.125rem 0.5rem; border: 1px solid #a7f3d0; width: fit-content;">FAM-1234</span>
+                  </div>
+                </td>
+                <td style="padding: 1rem;">
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 2.25rem; height: 2.25rem; background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">M</div>
+                    <span style="font-size: 0.875rem; font-weight: 700; color: #1e293b; text-transform: capitalize;">Maria Anastasia</span>
+                  </div>
+                </td>
+                <td style="padding: 1rem; text-align: center;">
+                  <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.25rem 0.75rem; font-size: 0.875rem; font-weight: 700; color: #475569;">
+                    <i data-lucide="users" style="width: 0.875rem; height: 0.875rem; color: #94a3b8;"></i> 4
+                  </div>
+                </td>
+                <td style="padding: 1rem;">
+                  <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">Milik Sendiri</span>
+                </td>
+                <td style="padding: 1rem; font-size: 0.875rem; font-weight: 700; color: #334155;">Rp 5.500.000</td>
+                <td style="padding: 1rem; text-align: center; padding-right: 1.25rem;">
+                  <div style="display: flex; justify-content: center; gap: 0.25rem;">
+                    <button class="btn-action btn-eye" title="Lihat Detail" onclick="openDetailModal()"><i data-lucide="eye" style="width: 1rem; height: 1rem;"></i></button>
+                    <button class="btn-action btn-trash" title="Hapus Data"><i data-lucide="trash-2" style="width: 1rem; height: 1rem;"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding: 1rem; font-size: 0.875rem; color: #64748b;">2</td>
+                <td style="padding: 1rem;">
+                  <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <span style="font-family: monospace; font-size: 0.75rem; font-weight: 700; color: #334155; background: #f1f5f9; padding: 0.25rem 0.5rem; border: 1px solid #e2e8f0; width: fit-content;">KK-PRK-8813</span>
+                    <span style="font-family: monospace; font-size: 0.625rem; font-weight: 700; color: #047857; background: #ecfdf5; padding: 0.125rem 0.5rem; border: 1px solid #a7f3d0; width: fit-content;">FAM-1235</span>
+                  </div>
+                </td>
+                <td style="padding: 1rem;">
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 2.25rem; height: 2.25rem; background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">Y</div>
+                    <span style="font-size: 0.875rem; font-weight: 700; color: #1e293b; text-transform: capitalize;">Yohanes Paulus</span>
+                  </div>
+                </td>
+                <td style="padding: 1rem; text-align: center;">
+                  <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.25rem 0.75rem; font-size: 0.875rem; font-weight: 700; color: #475569;">
+                    <i data-lucide="users" style="width: 0.875rem; height: 0.875rem; color: #94a3b8;"></i> 2
+                  </div>
+                </td>
+                <td style="padding: 1rem;">
+                  <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 700; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;">Sewa / Kontrak</span>
+                </td>
+                <td style="padding: 1rem; font-size: 0.875rem; font-weight: 700; color: #334155;">Rp 3.000.000</td>
+                <td style="padding: 1rem; text-align: center; padding-right: 1.25rem;">
+                  <div style="display: flex; justify-content: center; gap: 0.25rem;">
+                    <button class="btn-action btn-eye" title="Lihat Detail" onclick="openDetailModal()"><i data-lucide="eye" style="width: 1rem; height: 1rem;"></i></button>
+                    <button class="btn-action btn-trash" title="Hapus Data"><i data-lucide="trash-2" style="width: 1rem; height: 1rem;"></i></button>
+                  </div>
+                </td>
+              </tr>
+              
+              <!-- Row 3 -->
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding: 1rem; font-size: 0.875rem; color: #64748b;">3</td>
+                <td style="padding: 1rem;">
+                  <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <span style="font-family: monospace; font-size: 0.75rem; font-weight: 700; color: #334155; background: #f1f5f9; padding: 0.25rem 0.5rem; border: 1px solid #e2e8f0; width: fit-content;">KK-PRK-8814</span>
+                    <span style="font-family: monospace; font-size: 0.625rem; font-weight: 700; color: #047857; background: #ecfdf5; padding: 0.125rem 0.5rem; border: 1px solid #a7f3d0; width: fit-content;">FAM-1236</span>
+                  </div>
+                </td>
+                <td style="padding: 1rem;">
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 2.25rem; height: 2.25rem; background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">C</div>
+                    <span style="font-size: 0.875rem; font-weight: 700; color: #1e293b; text-transform: capitalize;">Cornelius Ginting</span>
+                  </div>
+                </td>
+                <td style="padding: 1rem; text-align: center;">
+                  <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.25rem 0.75rem; font-size: 0.875rem; font-weight: 700; color: #475569;">
+                    <i data-lucide="users" style="width: 0.875rem; height: 0.875rem; color: #94a3b8;"></i> 6
+                  </div>
+                </td>
+                <td style="padding: 1rem;">
+                  <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">Milik Sendiri</span>
+                </td>
+                <td style="padding: 1rem; font-size: 0.875rem; font-weight: 700; color: #334155;">-</td>
+                <td style="padding: 1rem; text-align: center; padding-right: 1.25rem;">
+                  <div style="display: flex; justify-content: center; gap: 0.25rem;">
+                    <button class="btn-action btn-eye" title="Lihat Detail" onclick="openDetailModal()"><i data-lucide="eye" style="width: 1rem; height: 1rem;"></i></button>
+                    <button class="btn-action btn-trash" title="Hapus Data"><i data-lucide="trash-2" style="width: 1rem; height: 1rem;"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div style="padding: 1rem 1.25rem; border-top: 1px solid #f1f5f9; background: rgba(248, 250, 252, 0.5); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+          <p style="font-size: 0.875rem; color: #64748b; margin: 0; font-weight: 500;">
+            Menampilkan <span style="font-weight: 700; color: #1e293b;">1</span>–<span style="font-weight: 700; color: #1e293b;">15</span> dari <span style="font-weight: 700; color: #1e293b;">312</span> data
+          </p>
+          <div style="display: flex; align-items: center; gap: 0.25rem;">
+            <button style="height: 2.25rem; width: 2.25rem; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #e2e8f0; color: #94a3b8; cursor: not-allowed;"><i data-lucide="chevron-left" style="width: 1rem; height: 1rem;"></i></button>
+            <button style="height: 2.25rem; width: 2.25rem; display: flex; align-items: center; justify-content: center; background: #059669; border: 1px solid #059669; color: white; font-weight: 700; font-size: 0.875rem; cursor: pointer;">1</button>
+            <button style="height: 2.25rem; width: 2.25rem; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #e2e8f0; color: #475569; font-weight: 700; font-size: 0.875rem; cursor: pointer;">2</button>
+            <button style="height: 2.25rem; width: 2.25rem; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #e2e8f0; color: #475569; font-weight: 700; font-size: 0.875rem; cursor: pointer;">3</button>
+            <button style="height: 2.25rem; width: 2.25rem; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #e2e8f0; color: #475569; cursor: pointer;"><i data-lucide="chevron-right" style="width: 1rem; height: 1rem;"></i></button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL DETAIL KELUARGA -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-content">
+      <!-- Sidebar Modal -->
+      <div class="modal-sidebar">
+        <!-- Profile summary -->
+        <div style="padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: white;">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div style="width: 3rem; height: 3rem; background: var(--brown-50); border: 1px solid var(--brown-100); color: var(--brown-700); font-weight: 800; font-size: 1.125rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <i data-lucide="home" style="width: 1.5rem; height: 1.5rem;"></i>
+            </div>
+            <div style="overflow: hidden;">
+              <h2 style="font-size: 0.875rem; font-weight: 800; color: #0f172a; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Maria Anastasia</h2>
+              <p style="font-size: 0.75rem; font-weight: 600; color: #64748b; margin: 2px 0 0 0; font-family: monospace;">KK-PRK-8812</p>
+            </div>
+          </div>
+          <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0;">KBG St. Paulus</span>
+        </div>
+
+        <div style="padding: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+          <div style="background: white; border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center;">
+            <div style="font-size: 1.5rem; font-weight: 900; color: #1e293b;">4</div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 2px;">Anggota</div>
+          </div>
+          <div style="background: white; border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #1e293b; text-transform: capitalize;">Milik Sendiri</div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 4px;">Rumah</div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav style="flex: 1; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.25rem; overflow-y: auto;">
+          <button class="modal-nav-btn active" onclick="switchModalTab('info', this)">
+            <span style="display: flex; align-items: center; gap: 0.75rem;">
+              <i data-lucide="home" style="width: 1rem; height: 1rem;"></i> Info Keluarga
+            </span>
+          </button>
+          <button class="modal-nav-btn" onclick="switchModalTab('anggota', this)">
+            <span style="display: flex; align-items: center; gap: 0.75rem;">
+              <i data-lucide="users" style="width: 1rem; height: 1rem;"></i> Anggota
+            </span>
+            <span style="background: #e2e8f0; color: #334155; padding: 0.125rem 0.5rem; border-radius: 0; font-size: 0.75rem;" class="badge-count">4</span>
+          </button>
+        </nav>
+
+        <!-- Close Button (Mobile / Bottom) -->
+        <div style="padding: 0.75rem; border-top: 1px solid #e2e8f0; background: white;">
+          <button onclick="closeDetailModal()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; background: transparent; border: none; color: #64748b; font-weight: 700; cursor: pointer;">
+            <i data-lucide="x" style="width: 1rem; height: 1rem;"></i> Tutup
+          </button>
+        </div>
+      </div>
+
+      <!-- Content Area Modal -->
+      <div class="modal-body">
+        
+        <!-- TAB: INFO KELUARGA -->
+        <div id="tab-info" class="tab-pane active">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">Informasi Keluarga</h3>
+            <p style="font-size: 0.875rem; color: #64748b; margin: 0;">Data hunian, ekonomi, dan lokasi.</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.625rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 0.25rem;">KBG</div>
+              <div style="font-weight: 800; color: #1e293b; font-size: 0.875rem;">KBG St. Paulus</div>
+            </div>
+            <div style="padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.625rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 0.25rem;">Status Rumah</div>
+              <div style="font-weight: 800; color: #1e293b; font-size: 0.875rem;">Milik Sendiri</div>
+            </div>
+            <div style="padding: 1rem; background: #eef2ff; border: 1px solid #c7d2fe; grid-column: span 2; @media (min-width: 640px) { grid-column: span 1; }">
+              <div style="font-size: 0.625rem; font-weight: 700; color: #4338ca; text-transform: uppercase; margin-bottom: 0.25rem;">Pendapatan</div>
+              <div style="font-weight: 800; color: #312e81; font-size: 0.875rem;">Rp 5.500.000</div>
+            </div>
+          </div>
+
+          <table class="detail-table" style="margin-bottom: 1.5rem;">
+            <tbody>
+              <tr><th>Kode Unik Keluarga</th><td style="font-family: monospace;">FAM-1234</td></tr>
+              <tr><th>No. KK Paroki</th><td style="font-family: monospace;">KK-PRK-8812</td></tr>
+              <tr><th>Asuransi Kesehatan</th><td>BPJS Kesehatan</td></tr>
+              <tr>
+                <th>Fasilitas MCK</th>
+                <td>
+                  <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.625rem; font-weight: 700; background: var(--brown-50); color: var(--brown-700); margin-right: 0.25rem;">Kamar Mandi</span>
+                  <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.625rem; font-weight: 700; background: var(--brown-50); color: var(--brown-700); margin-right: 0.25rem;">WC / Toilet</span>
+                </td>
+              </tr>
+              <tr><th>Koordinat GPS</th><td style="font-family: monospace; color: #475569;">-4.5442, 136.8833</td></tr>
+            </tbody>
+          </table>
+
+          <div style="width: 100%; height: 300px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 1.5rem;">
+            <div style="position: absolute; width: 100%; height: 100%; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 10px 10px;"></div>
+            <i data-lucide="map-pin" style="width: 2rem; height: 2rem; color: #059669; z-index: 1;"></i>
+            <span style="z-index: 1; margin-left: 0.5rem; font-weight: 700; color: #475569;">Peta Lokasi Keluarga Dummy</span>
+          </div>
+          
+          <div style="border: 1px dashed #cbd5e1; padding: 2rem; text-align: center; background: #f8fafc;">
+            <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; color: #cbd5e1; margin: 0 auto 0.5rem auto;"></i>
+            <p style="font-size: 0.875rem; font-weight: 700; color: #64748b; margin: 0;">Foto rumah belum diunggah</p>
+          </div>
+        </div>
+
+        <!-- TAB: ANGGOTA -->
+        <div id="tab-anggota" class="tab-pane">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">Daftar Anggota Keluarga</h3>
+              <p style="font-size: 0.875rem; color: #64748b; margin: 0;">Semua individu dalam satu KK.</p>
+            </div>
+            <span style="background: #1e293b; color: white; padding: 0.25rem 0.75rem; font-size: 0.875rem; font-weight: 700;">4 Orang</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            
+            <!-- Item Anggota 1 (KK) -->
+            <div style="border: 1px solid #e2e8f0; background: white; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--brown-400)'; this.style.boxShadow='0 4px 6px -1px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+              <div style="height: 4px; width: 100%; background: var(--brown-500);"></div>
+              <div style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                  <div style="width: 2.5rem; height: 2.5rem; border: 1px solid var(--brown-100); background: var(--brown-50); color: var(--brown-700); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.875rem;">M</div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                      <h4 style="margin: 0; font-size: 1rem; font-weight: 800; color: #0f172a;">Maria Anastasia</h4>
+                      <span style="font-family: monospace; font-size: 0.625rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.125rem 0.25rem; color: #475569;">UMT-00123</span>
+                      <span style="font-size: 0.625rem; font-weight: 800; background: var(--brown-100); color: var(--brown-800); border: 1px solid var(--brown-200); padding: 0.125rem 0.25rem;">KK</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem; font-size: 0.75rem; color: #64748b;">
+                      <span>Perempuan</span><span>•</span><span>34 Tahun</span><span>•</span><span>Guru</span>
+                    </div>
+                  </div>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #475569; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem;">Kepala Keluarga</span>
+              </div>
+            </div>
+
+            <!-- Item Anggota 2 -->
+            <div style="border: 1px solid #e2e8f0; background: white; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--brown-400)'; this.style.boxShadow='0 4px 6px -1px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+              <div style="height: 4px; width: 100%; background: #e2e8f0;"></div>
+              <div style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                  <div style="width: 2.5rem; height: 2.5rem; border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.875rem;">A</div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                      <h4 style="margin: 0; font-size: 1rem; font-weight: 800; color: #0f172a;">Antonius</h4>
+                      <span style="font-family: monospace; font-size: 0.625rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.125rem 0.25rem; color: #475569;">UMT-00155</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem; font-size: 0.75rem; color: #64748b;">
+                      <span>Laki-laki</span><span>•</span><span>10 Tahun</span><span>•</span><span>Pelajar</span>
+                    </div>
+                  </div>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #475569; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem;">Anak</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Toggle Sidebar
+    function toggleSidebarLayout() {
+      const sidebar = document.getElementById('appSidebar');
+      const main = document.querySelector('.main-content');
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('expanded');
+    }
+
+    // Toggle Submenu (Dropdown)
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById('submenu-' + id);
+      const chevron = submenu.previousElementSibling.querySelector('.submenu-chevron');
+      if (submenu.style.display === 'none' || submenu.style.display === '') {
+        submenu.style.display = 'flex';
+        chevron.style.transform = 'rotate(90deg)';
+      } else {
+        submenu.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('detailModal');
+
+    function openDetailModal() {
+      modal.classList.add('active');
+    }
+
+    function closeDetailModal() {
+      modal.classList.remove('active');
+    }
+
+    // Tutup modal jika mengklik area luar overlay
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeDetailModal();
+    });
+
+    // Tab Logic
+    function switchModalTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.modal-nav-btn').forEach(el => {
+        el.classList.remove('active');
+        const badge = el.querySelector('.badge-count');
+        if (badge) {
+          badge.style.background = '#e2e8f0';
+          badge.style.color = '#334155';
+        }
+      });
+      
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btnElement.classList.add('active');
+      const activeBadge = btnElement.querySelector('.badge-count');
+      if (activeBadge) {
+        activeBadge.style.background = 'var(--brown-500)';
+        activeBadge.style.color = 'white';
+      }
+    }
+  </script>
+</body>
+</html>

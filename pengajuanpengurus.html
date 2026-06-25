@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengajuan Pengurus - SIMATIKA KBG</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest">
+    function toggleSidebarLayout() {
+      const sidebar = document.getElementById('appSidebar');
+      const main = document.querySelector('.main-content');
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('expanded');
+    }
+
+  </script>
+  <style>
+    body {
+      background-color: #f8fafc; /* Lighter background for form page */
+      display: flex;
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+    
+    /* SIDEBAR STYLES */
+    
+    
+    
+    .nav-label {
+      padding: 0 0.75rem 0.5rem;
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #5c7cb8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.625rem 0.75rem;
+      color: #8faadd;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.125rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .nav-item:hover {
+      background-color: rgba(109, 76, 65, 0.2); 
+      color: #a8c1f0;
+    }
+    .nav-item.active {
+      background-color: #6d4b40;
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2); 
+    }
+    .nav-item-icon {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .submenu {
+      margin-top: 0.25rem;
+      margin-left: 1rem;
+      padding-left: 0.5rem;
+      border-left: 1px solid rgba(30, 41, 59, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .submenu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      color: #8faadd;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+    .submenu-item:hover {
+      color: #a8c1f0;
+      background-color: rgba(109, 76, 65, 0.15);
+    }
+    .submenu-item.active {
+      color: white;
+      background-color: #875d41;
+      box-shadow: 0 4px 6px -1px rgba(67, 20, 7, 0.3);
+    }
+
+    /* MAIN CONTENT */
+    
+    
+    .content-area {
+      padding: 2rem;
+      max-width: 64rem; /* max-w-5xl equivalent */
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* HEADER TEXT */
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    .page-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #fbf9f8; /* brown-50 */
+      border: 1px solid rgba(101, 67, 33, 0.1); /* brown-100 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #875d41; /* brown-600 */
+    }
+    .page-subtitle {
+      margin: 0.5rem 0 0 3.25rem;
+      font-size: 0.875rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* CARDS */
+    .form-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow-sm);
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #f1f5f9;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .card-icon {
+      padding: 0.5rem;
+      background: #fbf9f8;
+      border: 1px solid rgba(101, 67, 33, 0.1);
+      color: #654321;
+    }
+    .card-icon.blue {
+      background: #eff6ff;
+      border-color: #dbeafe;
+      color: #1d4ed8;
+    }
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* FORM GROUPS */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .input-with-icon {
+      position: relative;
+    }
+    .input-with-icon i {
+      position: absolute;
+      left: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+    .form-control {
+      width: 100%;
+      height: 2.75rem;
+      padding: 0 0.875rem 0 2.5rem;
+      border: 1px solid #e2e8f0;
+      background: white;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: inherit;
+      color: #1e293b;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+    .form-control:hover { background: #f8fafc; }
+    .form-control:focus {
+      outline: none;
+      border-color: #875d41;
+    }
+
+    /* FILE UPLOAD */
+    .upload-box {
+      background: rgba(239, 246, 255, 0.5); /* blue-50/50 */
+      border: 1px solid #dbeafe; /* blue-100 */
+      padding: 1.25rem;
+    }
+    .upload-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1e40af; /* blue-800 */
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .file-input {
+      width: 100%;
+      padding: 0.5rem;
+      background: white;
+      border: 1px solid #bfdbfe; /* blue-200 */
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .file-help {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(37, 99, 235, 0.7); /* blue-600/70 */
+      margin-top: 0.5rem;
+    }
+
+    /* DYNAMIC ITEM CARD */
+    .dynamic-item {
+      position: relative;
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.2s;
+    }
+    .dynamic-item:hover {
+      border-color: rgba(101, 67, 33, 0.3); /* brown-300 */
+      background: rgba(248, 250, 252, 0.5); /* slate-50/50 */
+    }
+    .item-number {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2rem;
+      height: 2rem;
+      background: #654321;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+    .btn-delete {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 0.375rem;
+      transition: all 0.2s;
+    }
+    .btn-delete:hover {
+      color: #e11d48;
+      background: #fff1f2;
+      border-color: #fecdd3;
+    }
+    .dynamic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+    }
+    @media (max-width: 768px) {
+      .dynamic-grid, .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* BUTTONS */
+    .btn-add {
+      width: 100%;
+      padding: 1.5rem;
+      background: transparent;
+      border: 2px dashed #e2e8f0;
+      color: #654321; /* brown-600 */
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-add:hover {
+      background: #fbf9f8;
+      border-color: #d6c5b3;
+      color: #4d3319;
+    }
+
+    .btn-save {
+      background: #654321;
+      color: white;
+      padding: 0 2rem;
+      height: 3rem;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: #4d3319; }
+
+  </style>
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+  <aside class="sidebar" id="appSidebar">
+    <div class="sidebar-header">
+      <img src="images/logo.png" alt="Logo" class="sidebar-logo-img" onerror="this.src='https://via.placeholder.com/40';">
+      <div class="sidebar-brand-text">
+        <span style="font-weight: 700; font-size: 1.125rem; color: white; line-height: 1.1;">SIMATIKA</span>
+        <span style="font-size: 0.6875rem; color: #94a3b8;">Keuskupan Timika</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <p class="nav-label">MENU KBG</p>
+      
+      <a href="dashboard.html" class="nav-item ">
+        <div class="nav-item-icon">
+          <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Dashboard KBG</span>
+        </div>
+      </a>
+      
+      <div class="nav-item " onclick="toggleSubmenu('sensus')">
+        <div class="nav-item-icon">
+          <i data-lucide="clipboard-list" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Sensus Umat</span>
+        </div>
+        <i data-lucide="chevron-down" class="submenu-chevron" style="width: 1rem; height: 1rem; transform: rotate(0deg);"></i>
+      </div>
+      <div class="submenu" id="submenu-sensus" style="display: none;">
+        <a href="pendataan.html" class="submenu-item ">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Form Pendataan</span>
+        </a>
+        <a href="datadraft.html" class="submenu-item ">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Draft</span>
+        </a>
+      </div>
+      
+      <a href="semuadata.html" class="nav-item ">
+        <div class="nav-item-icon">
+          <i data-lucide="folder-open" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Semua Data</span>
+        </div>
+      </a>
+      
+      <a href="datakeluarga.html" class="nav-item ">
+        <div class="nav-item-icon">
+          <i data-lucide="user-plus" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Data Keluarga</span>
+        </div>
+      </a>
+      
+      <a href="petaumat.html" class="nav-item ">
+        <div class="nav-item-icon">
+          <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Peta Umat</span>
+        </div>
+      </a>
+      
+      <a href="pengurusaktif.html" class="nav-item ">
+        <div class="nav-item-icon">
+          <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Pengurus Aktif</span>
+        </div>
+      </a>
+      
+      <a href="pengajuanpengurus.html" class="nav-item active">
+        <div class="nav-item-icon">
+          <i data-lucide="shield-check" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Pengajuan Pengurus</span>
+        </div>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="circle-badge">N</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+        <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button class="btn-hamburger" onclick="toggleSidebarLayout()">
+          <i data-lucide="menu" style="width: 1.5rem; height: 1.5rem; color: #475569;"></i>
+        </button>
+        <h1 class="topbar-title">Pengajuan Pengurus</h1>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        
+        <div class="notification-wrapper">
+          <i data-lucide="bell" style="width: 1.25rem; height: 1.25rem; color: #475569;"></i>
+          <span class="notification-badge">5</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding-left: 1.25rem; border-left: 1px solid #e2e8f0;">
+          <div style="text-align: right;">
+            <p style="font-weight: 700; font-size: 0.875rem; margin: 0; color: #1e293b;">kbg_paulus</p>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0;">Ketua KBG</p>
+          </div>
+          <div style="width: 2.5rem; height: 2.5rem; background-color: #6d4b40; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            KP
+          </div>
+        </div>
+        
+        <a href="index.html" class="btn-logout" title="Keluar">
+          <i data-lucide="log-out" style="width: 1.25rem; height: 1.25rem; color: #334155;"></i>
+        </a>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <!-- HEADER TEXT -->
+      <div>
+        <h1 class="page-title">
+          <div class="page-icon">
+            <i data-lucide="shield" style="width: 1.25rem; height: 1.25rem;"></i>
+          </div>
+          Data Kepengurusan KBG
+        </h1>
+        <p class="page-subtitle">Perbarui struktur organisasi dan masa bakti pengurus KBG.</p>
+      </div>
+
+      <!-- CARD 1: MASA BAKTI -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i data-lucide="calendar" style="width: 1.25rem; height: 1.25rem;"></i>
+          </div>
+          <h2 class="card-title">Masa Bakti (Periode Jabatan)</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tahun Mulai</label>
+              <div class="input-with-icon">
+                <i data-lucide="calendar" style="width: 1rem; height: 1rem;"></i>
+                <select class="form-control" id="tahunMulai">
+                  <!-- Generated by JS -->
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tahun Selesai</label>
+              <div class="input-with-icon">
+                <i data-lucide="calendar" style="width: 1rem; height: 1rem;"></i>
+                <select class="form-control" id="tahunSelesai">
+                  <!-- Generated by JS -->
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="upload-box">
+            <label class="upload-label">
+              <i data-lucide="shield" style="width: 1rem; height: 1rem;"></i>
+              Bukti Verifikasi (Opsional)
+            </label>
+            <input type="file" class="file-input" accept=".pdf,image/*">
+            <p class="file-help">Unggah Surat Keputusan (SK) Pengangkatan yang ditandatangani Pastor Paroki untuk memvalidasi kepengurusan ini.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: SUSUNAN PENGURUS -->
+      <div class="form-card">
+        <div class="card-header" style="justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="card-icon blue">
+              <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+            </div>
+            <h2 class="card-title">Susunan Pengurus</h2>
+          </div>
+        </div>
+        <div class="card-body" id="pengurusContainer">
+          <!-- Dynamic Form List Will Render Here -->
+          
+        </div>
+        <div style="padding: 0 1.5rem 1.5rem 1.5rem;">
+          <button class="btn-add" onclick="addPengurus()">
+            <i data-lucide="plus" style="width: 1.25rem; height: 1.25rem;"></i>
+            Tambah Pengurus Baru
+          </button>
+        </div>
+      </div>
+
+      <!-- SAVE BUTTON -->
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+        <button class="btn-save" onclick="simpanStruktur()">
+          <i data-lucide="save" style="width: 1.25rem; height: 1.25rem;"></i>
+          Simpan Struktur Kepengurusan
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Setup Years
+    const currentYear = new Date().getFullYear();
+    const mulaiSelect = document.getElementById('tahunMulai');
+    const selesaiSelect = document.getElementById('tahunSelesai');
+    
+    for(let i = currentYear - 5; i <= currentYear + 10; i++) {
+      let optMulai = document.createElement('option');
+      optMulai.value = i;
+      optMulai.innerText = i;
+      if(i === currentYear) optMulai.selected = true;
+      mulaiSelect.appendChild(optMulai);
+
+      let optSelesai = document.createElement('option');
+      optSelesai.value = i;
+      optSelesai.innerText = i;
+      if(i === currentYear + 3) optSelesai.selected = true;
+      selesaiSelect.appendChild(optSelesai);
+    }
+
+    // Dynamic Pengurus Form State
+    let pengurusList = [
+      { id: Date.now(), jabatan: '', nama: '', telepon: '' }
+    ];
+
+    const jabatanOptions = [
+      "Ketua", "Wakil Ketua", "Sekretaris", "Bendahara", 
+      "Seksi Liturgi", "Seksi Katekese/Pewartaan", 
+      "Seksi Sosial-Karitatif", "Seksi Keluarga", 
+      "Seksi Kepemudaan", "Seksi Kerasulan Awam", 
+      "Seksi Pengembangan Sosial Ekonomi (PSE)"
+    ];
+
+    function renderPengurusForm() {
+      const container = document.getElementById('pengurusContainer');
+      container.innerHTML = '';
+
+      pengurusList.forEach((p, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'dynamic-item';
+        
+        let jabatanOptsHtml = '<option value="">Pilih Jabatan...</option>';
+        jabatanOptions.forEach(opt => {
+          jabatanOptsHtml += `<option value="${opt}" ${p.jabatan === opt ? 'selected' : ''}>${opt}</option>`;
+        });
+
+        // Delete button visible only if > 1 items
+        let delBtnHtml = '';
+        if(pengurusList.length > 1) {
+          delBtnHtml = `
+            <button class="btn-delete" title="Hapus Pengurus" onclick="removePengurus(${p.id})">
+              <i data-lucide="trash-2" style="width: 1rem; height: 1rem;"></i>
+            </button>
+          `;
+        }
+
+        itemDiv.innerHTML = `
+          <div class="item-number">${index + 1}</div>
+          ${delBtnHtml}
+          
+          <div class="dynamic-grid">
+            <div class="form-group">
+              <label class="form-label">Jabatan</label>
+              <div class="input-with-icon">
+                <i data-lucide="shield" style="width: 1.25rem; height: 1.25rem;"></i>
+                <select class="form-control" onchange="updateField(${p.id}, 'jabatan', this.value)">
+                  ${jabatanOptsHtml}
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Pilih Umat</label>
+              <div class="input-with-icon">
+                <i data-lucide="user-circle-2" style="width: 1.25rem; height: 1.25rem;"></i>
+                <input type="text" class="form-control" placeholder="-- Ketik Nama Umat --" value="${p.nama}" onchange="updateField(${p.id}, 'nama', this.value)">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Nomor WhatsApp</label>
+              <div class="input-with-icon">
+                <i data-lucide="phone" style="width: 1.25rem; height: 1.25rem;"></i>
+                <input type="tel" class="form-control" placeholder="Contoh: 0812..." value="${p.telepon}" onchange="updateField(${p.id}, 'telepon', this.value)">
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(itemDiv);
+      });
+
+      lucide.createIcons();
+    }
+
+    function addPengurus() {
+      pengurusList.push({ id: Date.now(), jabatan: '', nama: '', telepon: '' });
+      renderPengurusForm();
+    }
+
+    function removePengurus(id) {
+      if(pengurusList.length <= 1) return;
+      pengurusList = pengurusList.filter(p => p.id !== id);
+      renderPengurusForm();
+    }
+
+    function updateField(id, field, value) {
+      const idx = pengurusList.findIndex(p => p.id === id);
+      if(idx !== -1) {
+        pengurusList[idx][field] = value;
+      }
+    }
+
+    function simpanStruktur() {
+      alert("Struktur Kepengurusan berhasil dikirim ke Verifikasi Paroki!");
+      window.location.href = "pengurusaktif.html"; // Simulate redirect
+    }
+
+    // Toggle menu
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById('submenu-' + id);
+      if (submenu.style.display === 'none') {
+        submenu.style.display = 'flex';
+        submenu.previousElementSibling.querySelector('i[data-lucide="chevron-down"]').style.transform = 'rotate(180deg)';
+      } else {
+        submenu.style.display = 'none';
+        submenu.previousElementSibling.querySelector('i[data-lucide="chevron-down"]').style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Initialize UI
+    renderPengurusForm();
+    lucide.createIcons();
+  
+    function toggleSidebarLayout() {
+      const sidebar = document.getElementById('appSidebar');
+      const main = document.querySelector('.main-content');
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('expanded');
+    }
+
+  </script>
+</body>
+</html>

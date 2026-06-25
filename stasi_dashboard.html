@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Stasi - SIMATIKA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background-color: #f8fafc; 
+      display: flex;
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+    
+    .content-area {
+      padding: 1.5rem 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    /* GRIDS */
+    .grid-4 { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1rem; margin-bottom: 1rem; }
+    @media (min-width: 768px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="appSidebar">
+    <div class="sidebar-header">
+      <img src="images/logo.png" alt="Logo" class="sidebar-logo-img" onerror="this.src='https://via.placeholder.com/40';">
+      <div class="sidebar-brand-text">
+        <span style="font-weight: 700; font-size: 1.125rem; color: white; line-height: 1.1;">SIMATIKA</span>
+        <span style="font-size: 0.6875rem; color: #94a3b8;">Keuskupan Timika</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <p class="nav-label">MENU STASI</p>
+      
+      <a href="stasi_dashboard.html" class="nav-item active">
+        <div class="nav-item-icon">
+          <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Dashboard Stasi</span>
+        </div>
+      </a>
+      
+      <!-- Database Induk Dropdown -->
+      <div class="nav-item" onclick="toggleSubmenu('induk')">
+        <div class="nav-item-icon">
+          <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Database Induk</span>
+        </div>
+        <i data-lucide="chevron-right" class="submenu-chevron" style="width: 1rem; height: 1rem;"></i>
+      </div>
+      <div class="submenu" id="submenu-induk" style="display: none;">
+        <a href="stasi_dataumat.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Umat</span>
+        </a>
+        <a href="stasi_datakeluarga.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Keluarga</span>
+        </a>
+        <a href="stasi_pengurus.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Pengurus Aktif</span>
+        </a>
+        <a href="stasi_sakramen.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Data Sakramen</span>
+        </a>
+        <a href="stasi_mutasi.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Mutasi Umat</span>
+        </a>
+        <a href="stasi_aktivitas.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Aktivitas Pastoral</span>
+        </a>
+      </div>
+      
+      <a href="stasi_peta.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Peta Stasi</span>
+        </div>
+      </a>
+      
+      <a href="stasi_verifikasi.html" class="nav-item">
+        <div class="nav-item-icon">
+          <i data-lucide="shield-check" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Verifikasi Data</span>
+        </div>
+      </a>
+      
+      <!-- Laporan & Arsip Dropdown -->
+      <div class="nav-item" onclick="toggleSubmenu('laporan')">
+        <div class="nav-item-icon">
+          <i data-lucide="folder-open" style="width: 1.25rem; height: 1.25rem;"></i>
+          <span class="nav-text">Laporan & Arsip</span>
+        </div>
+        <i data-lucide="chevron-right" class="submenu-chevron" style="width: 1rem; height: 1rem;"></i>
+      </div>
+      <div class="submenu" id="submenu-laporan" style="display: none;">
+        <a href="stasi_laporan.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Laporan & Statistik</span>
+        </a>
+        <a href="stasi_dokumen.html" class="submenu-item">
+          <div style="width: 0.375rem; height: 0.375rem; border-radius: 50%; background-color: #475569;" class="sub-dot"></div>
+          <span class="nav-text">Dokumen & Arsip</span>
+        </a>
+      </div>
+
+    </nav>
+    <div class="sidebar-footer">
+      <div class="circle-badge">N</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button class="btn-hamburger" onclick="toggleSidebarLayout()">
+          <i data-lucide="menu" style="width: 1.5rem; height: 1.5rem; color: #475569;"></i>
+        </button>
+        <h1 class="topbar-title">Dashboard Stasi</h1>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        
+        <div class="notification-wrapper">
+          <i data-lucide="bell" style="width: 1.25rem; height: 1.25rem; color: #475569;"></i>
+          <span class="notification-badge">2</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding-left: 1.25rem; border-left: 1px solid #e2e8f0;">
+          <div style="text-align: right;">
+            <p style="font-weight: 700; font-size: 0.875rem; margin: 0; color: #1e293b;">stasi_paulus</p>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0;">Admin Stasi</p>
+          </div>
+          <div style="width: 2.5rem; height: 2.5rem; background-color: #6d4b40; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            SP
+          </div>
+        </div>
+        
+        <a href="index.html" class="btn-logout" title="Keluar">
+          <i data-lucide="log-out" style="width: 1.25rem; height: 1.25rem; color: #334155;"></i>
+        </a>
+      </div>
+    </header>
+
+    <div class="content-area">
+      
+      <!-- 4 KPI CARDS -->
+      <div class="grid-4">
+        
+        <!-- KPI 1 -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 15px -3px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px 0 rgba(0,0,0,0.05)';">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <p style="font-size: 0.875rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Total Umat</p>
+            <div style="padding: 0.625rem; background: linear-gradient(135deg, var(--brown-500), var(--brown-600)); color: white; border-radius: 0.375rem; box-shadow: 0 4px 6px -1px rgba(158, 75, 49, 0.2);">
+              <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+            </div>
+          </div>
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 0.375rem;">
+              <h3 style="font-size: 1.875rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.025em;">1.245</h3>
+              <span style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Orang</span>
+            </div>
+            <div style="margin-top: 0.75rem; display: inline-flex; align-items: center; font-size: 0.75rem; color: #059669; background-color: #ecfdf5; padding: 0.25rem 0.5rem; border: 1px solid #a7f3d0; border-radius: 0.25rem;">
+              <i data-lucide="trending-up" style="width: 0.875rem; height: 0.875rem; margin-right: 0.25rem;"></i>
+              <span style="font-weight: 700; margin-right: 0.25rem;">Terkini</span>
+              <span style="color: #64748b;">Database Utama</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 15px -3px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px 0 rgba(0,0,0,0.05)';">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <p style="font-size: 0.875rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Total Keluarga</p>
+            <div style="padding: 0.625rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 0.375rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);">
+              <i data-lucide="users" style="width: 1.25rem; height: 1.25rem;"></i>
+            </div>
+          </div>
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 0.375rem;">
+              <h3 style="font-size: 1.875rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.025em;">312</h3>
+              <span style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Keluarga</span>
+            </div>
+            <div style="margin-top: 0.75rem; display: inline-flex; align-items: center; font-size: 0.75rem; color: #059669; background-color: #ecfdf5; padding: 0.25rem 0.5rem; border: 1px solid #a7f3d0; border-radius: 0.25rem;">
+              <i data-lucide="trending-up" style="width: 0.875rem; height: 0.875rem; margin-right: 0.25rem;"></i>
+              <span style="font-weight: 700; margin-right: 0.25rem;">Terkini</span>
+              <span style="color: #64748b;">Database Utama</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 15px -3px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px 0 rgba(0,0,0,0.05)';">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <p style="font-size: 0.875rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Sakramen Baptis</p>
+            <div style="padding: 0.625rem; background: linear-gradient(135deg, #a855f7, #9333ea); color: white; border-radius: 0.375rem; box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.2);">
+              <i data-lucide="crosshair" style="width: 1.25rem; height: 1.25rem;"></i>
+            </div>
+          </div>
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 0.375rem;">
+              <h3 style="font-size: 1.875rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.025em;">1.050</h3>
+              <span style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Orang</span>
+            </div>
+            <div style="margin-top: 0.75rem; display: inline-flex; align-items: center; font-size: 0.75rem; color: #059669; background-color: #ecfdf5; padding: 0.25rem 0.5rem; border: 1px solid #a7f3d0; border-radius: 0.25rem;">
+              <i data-lucide="trending-up" style="width: 0.875rem; height: 0.875rem; margin-right: 0.25rem;"></i>
+              <span style="font-weight: 700; margin-right: 0.25rem;">Terkini</span>
+              <span style="color: #64748b;">Data Tervalidasi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 15px -3px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px 0 rgba(0,0,0,0.05)';">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <p style="font-size: 0.875rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Sakramen Nikah</p>
+            <div style="padding: 0.625rem; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border-radius: 0.375rem; box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);">
+              <i data-lucide="heart-handshake" style="width: 1.25rem; height: 1.25rem;"></i>
+            </div>
+          </div>
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 0.375rem;">
+              <h3 style="font-size: 1.875rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.025em;">245</h3>
+              <span style="font-size: 0.875rem; font-weight: 500; color: #64748b;">Pasangan</span>
+            </div>
+            <div style="margin-top: 0.75rem; display: inline-flex; align-items: center; font-size: 0.75rem; color: #059669; background-color: #ecfdf5; padding: 0.25rem 0.5rem; border: 1px solid #a7f3d0; border-radius: 0.25rem;">
+              <i data-lucide="trending-up" style="width: 0.875rem; height: 0.875rem; margin-right: 0.25rem;"></i>
+              <span style="font-weight: 700; margin-right: 0.25rem;">Terkini</span>
+              <span style="color: #64748b;">Data Tervalidasi</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MAIN CHARTS -->
+      <div style="display: grid; grid-template-columns: 4fr 3fr; gap: 1rem;">
+        
+        <!-- Line Chart: Grafik Jumlah Umat -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.5rem; display: flex; flex-direction: column;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin: 0;">Grafik Jumlah Umat</h3>
+            <span style="font-size: 0.75rem; border: 1px solid #e2e8f0; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">Tahun 2026</span>
+          </div>
+          <!-- Dummy Line Chart visual using SVG -->
+          <div style="flex: 1; min-height: 200px; display: flex; align-items: flex-end; position: relative;">
+            <svg viewBox="0 0 400 150" style="width: 100%; height: 100%; overflow: visible;">
+              <polyline fill="none" stroke="#3b82f6" stroke-width="4" points="0,120 50,110 100,130 150,90 200,85 250,60 300,75 350,40 400,20" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="0" cy="120" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="50" cy="110" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="100" cy="130" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="150" cy="90" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="200" cy="85" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="250" cy="60" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="300" cy="75" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="350" cy="40" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="400" cy="20" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+            </svg>
+            <div style="position: absolute; bottom: -20px; left: 0; width: 100%; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
+              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>Mei</span><span>Jun</span><span>Jul</span><span>Ags</span><span>Sep</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donut Chart: Komposisi Umur -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+          <div style="width: 100%; margin-bottom: 1rem;">
+            <h3 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin: 0;">Komposisi Umur Umat</h3>
+          </div>
+          <div style="flex: 1; display: flex; align-items: center; justify-content: center; position: relative; width: 100%;">
+            <!-- Dummy CSS Donut Chart -->
+            <div style="width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(#10b981 0% 30%, #3b82f6 30% 65%, #f59e0b 65% 90%, #ef4444 90% 100%); display: flex; align-items: center; justify-content: center; position: relative;">
+              <div style="width: 110px; height: 110px; border-radius: 50%; background-color: white; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <span style="font-size: 0.625rem; font-weight: 600; color: #64748b;">Total Umat</span>
+                <span style="font-size: 1.25rem; font-weight: 800; color: #0f172a;">1.245</span>
+              </div>
+            </div>
+          </div>
+          <!-- Legend -->
+          <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: #475569; margin-top: 1rem; flex-wrap: wrap; justify-content: center;">
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background-color: #10b981;"></span> Anak-anak (30%)</div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background-color: #3b82f6;"></span> Dewasa (35%)</div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background-color: #f59e0b;"></span> Lansia (25%)</div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background-color: #ef4444;"></span> Balita (10%)</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ADDITIONAL CHARTS & MAP -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+        
+        <!-- Statistik Mutasi -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; align-items: center;">
+          <h3 style="font-size: 0.875rem; font-weight: 600; color: #1e293b; margin: 0 0 1rem 0; align-self: flex-start;">Statistik Mutasi</h3>
+          <div style="width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(#8b5cf6 0% 70%, #d8b4fe 70% 100%); margin-bottom: 1rem;"></div>
+          <div style="display: flex; gap: 1rem; font-size: 0.7rem; color: #475569;">
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 6px; height: 6px; border-radius: 50%; background-color: #8b5cf6;"></span> Masuk</div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 6px; height: 6px; border-radius: 50%; background-color: #d8b4fe;"></span> Keluar</div>
+          </div>
+        </div>
+
+        <!-- Keaktifan Pastoral -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; align-items: center;">
+          <h3 style="font-size: 0.875rem; font-weight: 600; color: #1e293b; margin: 0 0 1rem 0; align-self: flex-start;">Keaktifan Pastoral</h3>
+          <div style="width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(#0ea5e9 0% 85%, #bae6fd 85% 100%); margin-bottom: 1rem;"></div>
+          <div style="display: flex; gap: 1rem; font-size: 0.7rem; color: #475569;">
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 6px; height: 6px; border-radius: 50%; background-color: #0ea5e9;"></span> Aktif</div>
+            <div style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 6px; height: 6px; border-radius: 50%; background-color: #bae6fd;"></span> Pasif</div>
+          </div>
+        </div>
+
+        <!-- Peta Sebaran (Placeholder) -->
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.5rem; overflow: hidden; display: flex; flex-direction: column;">
+          <div style="padding: 1.25rem 1.25rem 0.5rem; background: rgba(255,255,255,0.8);">
+            <h3 style="font-size: 0.875rem; font-weight: 600; color: #1e293b; margin: 0;">Peta Sebaran Stasi</h3>
+          </div>
+          <div style="flex: 1; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative;">
+            <!-- Placeholder Map Image using CSS grid/patterns -->
+            <div style="position: absolute; width: 100%; height: 100%; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 10px 10px;"></div>
+            <i data-lucide="map-pin" style="width: 2rem; height: 2rem; color: var(--brown-600); z-index: 1;"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TABLE: Data Menunggu Verifikasi -->
+      <div style="background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; overflow: hidden; margin-top: 1rem;">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="padding: 0.5rem; background-color: #fffbeb; color: #d97706; border-radius: 0.375rem; border: 1px solid #fef3c7;">
+              <i data-lucide="clock" style="width: 1.25rem; height: 1.25rem;"></i>
+            </div>
+            <div>
+              <h3 style="font-size: 1.125rem; font-weight: 700; color: #1e293b; margin: 0;">Data Menunggu Verifikasi</h3>
+              <p style="font-size: 0.875rem; color: #64748b; margin: 0;">Daftar umat yang baru didata dan butuh peninjauan</p>
+            </div>
+          </div>
+          <a href="#" style="font-size: 0.875rem; font-weight: 600; color: var(--brown-600); padding: 0.5rem 1rem; border: 1px solid var(--brown-200); border-radius: 0.375rem; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.backgroundColor='var(--brown-50)'" onmouseout="this.style.backgroundColor='transparent'">
+            Lihat Semua Antrean
+          </a>
+        </div>
+        
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
+                <th style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #475569; width: 60px;">No</th>
+                <th style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #475569;">Kepala Keluarga</th>
+                <th style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #475569;">Petugas Input</th>
+                <th style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #475569;">Tgl Input</th>
+                <th style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #475569;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 600; color: #64748b;">1</td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #1e293b;">Bpk. Yohanes Doe</td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #475569; display: flex; align-items: center; gap: 0.5rem;">
+                  <i data-lucide="user" style="width: 1rem; height: 1rem; color: #94a3b8;"></i> Ketua KBG St. Paulus
+                </td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #475569;">24 Jun 2026</td>
+                <td style="padding: 1rem 1.5rem;">
+                  <span style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; font-weight: 700; color: #b45309; background-color: #fef3c7; border: 1px solid #fde68a; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">
+                    <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i> Menunggu
+                  </span>
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 600; color: #64748b;">2</td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #1e293b;">Ibu Maria Simanjuntak</td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #475569; display: flex; align-items: center; gap: 0.5rem;">
+                  <i data-lucide="user" style="width: 1rem; height: 1rem; color: #94a3b8;"></i> Ketua KBG St. Petrus
+                </td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #475569;">23 Jun 2026</td>
+                <td style="padding: 1rem 1.5rem;">
+                  <span style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; font-weight: 700; color: #b45309; background-color: #fef3c7; border: 1px solid #fde68a; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">
+                    <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i> Menunggu
+                  </span>
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 600; color: #64748b;">3</td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 700; color: #1e293b;">Keluarga Bpk. Agustinus</td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #475569; display: flex; align-items: center; gap: 0.5rem;">
+                  <i data-lucide="user" style="width: 1rem; height: 1rem; color: #94a3b8;"></i> Ketua KBG St. Maria
+                </td>
+                <td style="padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #475569;">23 Jun 2026</td>
+                <td style="padding: 1rem 1.5rem;">
+                  <span style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; font-weight: 700; color: #b45309; background-color: #fef3c7; border: 1px solid #fde68a; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">
+                    <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i> Menunggu
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding: 1rem 1.5rem; border-top: 1px solid #f1f5f9; font-size: 0.75rem; font-weight: 500; color: #64748b;">
+          Menampilkan 3 antrean terbaru
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Toggle Sidebar
+    function toggleSidebarLayout() {
+      const sidebar = document.getElementById('appSidebar');
+      const main = document.querySelector('.main-content');
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('expanded');
+    }
+
+    // Toggle Submenu (Dropdown)
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById('submenu-' + id);
+      const chevron = submenu.previousElementSibling.querySelector('.submenu-chevron');
+      if (submenu.style.display === 'none' || submenu.style.display === '') {
+        submenu.style.display = 'flex';
+        chevron.style.transform = 'rotate(90deg)';
+      } else {
+        submenu.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+  </script>
+</body>
+</html>
